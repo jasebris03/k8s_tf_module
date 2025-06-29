@@ -1,0 +1,253 @@
+# Pre-commit configuration for Terraform EKS Module
+# This file configures pre-commit hooks for code quality, security, and formatting
+
+repos:
+  # Terraform formatting and validation
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.88.0
+    hooks:
+      # Terraform formatting
+      - id: terraform_fmt
+        args:
+          - --args=-no-color
+          - --args=-diff
+          - --args=-write=true
+      
+      # Terraform validation
+      - id: terraform_validate
+        args:
+          - --args=-no-color
+      
+      # Terraform docs
+      - id: terraform_docs
+        args:
+          - --args=sort
+          - --args=--sort-by-required
+        exclude: |
+          (?x)^(
+              examples/.*|
+              modules/eks/templates/.*
+          )$
+      
+      # Terraform tflint
+      - id: terraform_tflint
+        args:
+          - --args=--no-color
+        exclude: |
+          (?x)^(
+              examples/.*|
+              modules/eks/templates/.*
+          )$
+      
+      # Terraform checkov
+      - id: terraform_checkov
+        args:
+          - --args=--skip-path=examples/
+          - --args=--skip-path=modules/eks/templates/
+          - --args=--framework=terraform
+          - --args=--output=cli
+          - --args=--output=json
+          - --args=--output-file-path=checkov-results.json
+          - --args=--soft-fail
+      
+      # Terraform tfsec
+      - id: terraform_tfsec
+        args:
+          - --args=--no-color
+          - --args=--format=json
+          - --args=--out=tfsec-results.json
+          - --args=--soft-fail
+        exclude: |
+          (?x)^(
+              examples/.*|
+              modules/eks/templates/.*
+          )$
+
+  # General code quality
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      # Check for merge conflicts
+      - id: check-merge-conflict
+      
+      # Check for trailing whitespace
+      - id: trailing-whitespace
+      
+      # Check for files ending with newline
+      - id: end-of-file-fixer
+      
+      # Check for YAML syntax
+      - id: check-yaml
+        files: \.(yaml|yml)$
+      
+      # Check for JSON syntax
+      - id: check-json
+        files: \.(json)$
+      
+      # Check for large files
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      
+      # Check for private keys
+      - id: detect-private-key
+      
+      # Check for AWS access keys
+      - id: detect-aws-credentials
+        args: ['--allow-missing-credentials']
+
+  # YAML formatting
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier
+        types: [yaml]
+        files: \.(yaml|yml)$
+        args: ['--prose-wrap=always']
+
+  # Markdown formatting
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier
+        types: [markdown]
+        files: \.(md|markdown)$
+        args: ['--prose-wrap=always']
+
+  # Shell script formatting and linting
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier
+        types: [shell]
+        files: \.(sh|bash)$
+
+  # Shell script linting
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.9.0.6
+    hooks:
+      - id: shellcheck
+        args: ['--severity=warning']
+        exclude: |
+          (?x)^(
+              modules/eks/templates/user-data\.sh
+          )$
+
+  # Security scanning
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: |
+          (?x)^(
+              \.git/.*|
+              examples/.*/\.terraform/.*|
+              modules/eks/templates/.*
+          )$
+
+  # License header check
+  - repo: https://github.com/apache/skywalking-eyes
+    rev: v0.5.0
+    hooks:
+      - id: license-eye
+        args: ['header', 'fix']
+        exclude: |
+          (?x)^(
+              \.git/.*|
+              examples/.*/\.terraform/.*|
+              modules/eks/templates/.*|
+              \.terraform/.*
+          )$
+
+  # Terraform security scanning with Trivy
+  - repo: https://github.com/aquasecurity/trivy
+    rev: v0.48.4
+    hooks:
+      - id: trivy_config
+        args: ['--severity', 'HIGH,CRITICAL']
+        exclude: |
+          (?x)^(
+              examples/.*|
+              modules/eks/templates/.*
+          )$
+      - id: trivy_fs
+        args: ['--severity', 'HIGH,CRITICAL']
+        exclude: |
+          (?x)^(
+              examples/.*|
+              modules/eks/templates/.*
+          )$
+
+  # Terraform compliance
+  - repo: https://github.com/eerkunt/terraform-compliance
+    rev: v1.3.42
+    hooks:
+      - id: terraform_compliance
+        args: ['--features', '.terraform-compliance']
+        exclude: |
+          (?x)^(
+              examples/.*|
+              modules/eks/templates/.*
+          )$
+
+  # Infracost for cost estimation
+  - repo: https://github.com/infracost/infracost
+    rev: v0.10.35
+    hooks:
+      - id: infracost_breakdown
+        args: ['--path=.']
+        exclude: |
+          (?x)^(
+              examples/.*|
+              modules/eks/templates/.*
+          )$
+
+  # Terraform graph visualization
+  - repo: https://github.com/terraform-docs/terraform-docs
+    rev: v0.16.0
+    hooks:
+      - id: terraform_docs
+        args: ['--output-file=README.md', '--output-mode=inject']
+        exclude: |
+          (?x)^(
+              examples/.*|
+              modules/eks/templates/.*
+          )$
+
+  # Git hooks for commit message formatting
+  - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
+    rev: v9.5.0
+    hooks:
+      - id: commitlint
+        stages: [commit-msg]
+        args: ['--config', '.commitlintrc.json']
+
+  # Conventional commits
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v3.13.0
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]
+
+  # Terraform plan validation
+  - repo: local
+    hooks:
+      - id: terraform-plan-validation
+        name: Terraform Plan Validation
+        entry: bash -c 'cd modules/eks && terraform init -backend=false && terraform validate'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [manual]
+
+  # Custom hook for Terraform security best practices
+  - repo: local
+    hooks:
+      - id: terraform-security-check
+        name: Terraform Security Best Practices Check
+        entry: bash -c 'echo "Running custom security checks..." && python scripts/security_check.py'
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [manual]
+        files: \.(tf|tfvars)$ 

@@ -1,0 +1,32 @@
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.1.0"
+tag_format = "v$version"
+version_files = [
+    "pyproject.toml:version"
+]
+
+[tool.commitizen.customize]
+message_template = "{{change_type}}{{scope}}: {{message}}"
+example = "feat(eks): add support for Fargate profiles"
+schema = "<type>(<scope>): <subject>"
+schema_pattern = "(build|ci|docs|feat|fix|perf|refactor|revert|style|test|chore|security)(\\(.+\\))?: .+"
+bump_pattern = "^(build|ci|docs|feat|fix|perf|refactor|revert|style|test|chore|security)(\\(.+\\))?(!)?"
+bump_map = """
+build = "patch"
+ci = "patch"
+docs = "patch"
+feat = "minor"
+fix = "patch"
+perf = "patch"
+refactor = "patch"
+revert = "patch"
+style = "patch"
+test = "patch"
+chore = "patch"
+security = "patch"
+"""
+change_type_order = ["BREAKING CHANGE", "feat", "fix", "refactor", "perf", "style", "test", "build", "ci", "docs", "chore", "revert", "security"]
+commit_parser = "^(?P<change_type>feat|fix|refactor|perf|style|test|build|ci|docs|chore|revert|security)(?:\\((?P<scope>[^()\\r\\n]*)\\))?(?:\\((?P<scope_2>[^()\\r\\n]*)\\))?(!)?: (?P<message>.*)?"
+pre_bump_hooks = []
+ 

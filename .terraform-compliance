@@ -1,0 +1,150 @@
+# Terraform Compliance Configuration
+# This file defines security and compliance rules for the EKS module
+
+# EKS Cluster Security Rules
+Given I have aws_eks_cluster defined
+Then it must contain enabled_cluster_log_types
+And its value must match the "api,audit,authenticator,controllerManager,scheduler" pattern
+
+Given I have aws_eks_cluster defined
+Then it must contain encryption_config
+And it must contain provider
+And it must contain key_arn
+
+Given I have aws_eks_cluster defined
+Then it must contain vpc_config
+And it must contain endpoint_private_access
+And its value must be true
+
+# VPC Security Rules
+Given I have aws_vpc defined
+Then it must contain enable_dns_hostnames
+And its value must be true
+
+Given I have aws_vpc defined
+Then it must contain enable_dns_support
+And its value must be true
+
+# Security Group Rules
+Given I have aws_security_group defined
+Then it must contain description
+And its value must not be null
+
+Given I have aws_security_group_rule defined
+Then it must contain description
+And its value must not be null
+
+# IAM Security Rules
+Given I have aws_iam_role defined
+Then it must contain assume_role_policy
+And it must contain Statement
+And it must contain Effect
+And its value must be Allow
+
+Given I have aws_iam_role_policy_attachment defined
+Then it must contain policy_arn
+And its value must not be null
+
+# KMS Security Rules
+Given I have aws_kms_key defined
+Then it must contain enable_key_rotation
+And its value must be true
+
+Given I have aws_kms_key defined
+Then it must contain deletion_window_in_days
+And its value must be greater than 0
+
+# Node Group Security Rules
+Given I have aws_eks_node_group defined
+Then it must contain subnet_ids
+And its value must not be null
+
+Given I have aws_eks_node_group defined
+Then it must contain scaling_config
+And it must contain desired_size
+And it must contain max_size
+And it must contain min_size
+
+# Launch Template Security Rules
+Given I have aws_launch_template defined
+Then it must contain metadata_options
+And it must contain http_tokens
+And its value must be required
+
+Given I have aws_launch_template defined
+Then it must contain monitoring
+And it must contain enabled
+And its value must be true
+
+# Fargate Profile Rules
+Given I have aws_eks_fargate_profile defined
+Then it must contain subnet_ids
+And its value must not be null
+
+Given I have aws_eks_fargate_profile defined
+Then it must contain selector
+And it must contain namespace
+And its value must not be null
+
+# OIDC Provider Rules
+Given I have aws_iam_openid_connect_provider defined
+Then it must contain client_id_list
+And it must contain sts.amazonaws.com
+
+Given I have aws_iam_openid_connect_provider defined
+Then it must contain thumbprint_list
+And its value must not be null
+
+# Resource Tagging Rules
+Given I have any resource defined
+When it contains tags
+Then it must contain Environment
+And its value must not be null
+
+Given I have any resource defined
+When it contains tags
+Then it must contain Project
+And its value must not be null
+
+# Cost Optimization Rules
+Given I have aws_eks_node_group defined
+Then it must contain capacity_type
+And its value must be one of ["ON_DEMAND", "SPOT"]
+
+# Network Security Rules
+Given I have aws_subnet defined
+When it contains tags
+Then it must contain kubernetes.io/cluster
+And its value must be shared
+
+Given I have aws_subnet defined
+When it contains tags
+Then it must contain kubernetes.io/role
+And its value must be one of ["elb", "internal-elb"]
+
+# Compliance Rules
+Given I have any resource defined
+Then it must contain tags
+And it must contain ManagedBy
+And its value must be terraform
+
+# Security Best Practices
+Given I have aws_eks_cluster defined
+Then it must contain version
+And its value must be greater than 1.25
+
+Given I have aws_eks_node_group defined
+Then it must contain version
+And its value must match the cluster version
+
+# Backup and Recovery
+Given I have aws_kms_key defined
+Then it must contain description
+And its value must not be null
+
+# Monitoring and Logging
+Given I have aws_eks_cluster defined
+Then it must contain enabled_cluster_log_types
+And its value must contain api
+And its value must contain audit
+And its value must contain authenticator 
