@@ -1,0 +1,172 @@
+# Terraform files
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+*.tfstate.lock.info
+.terraform/
+.terraform.lock.hcl
+.terraform.tfstate.lock.info
+
+# Terraform plan files
+*.tfplan
+*.tfplan.json
+plan.out
+plan.out.json
+
+# Terraform variables (sensitive)
+*.auto.tfvars
+*.auto.tfvars.json
+secrets.tfvars
+secrets.tfvars.json
+
+# Terraform crash log files
+crash.log
+crash.*.log
+
+# Terraform override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform CLI configuration files
+.terraformrc
+terraform.rc
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+log/
+
+# Security and compliance reports
+security-check-report.json
+checkov-results.json
+tfsec-results.json
+infracost-report.json
+*.baseline
+!.secrets.baseline
+
+# Pre-commit
+.pre-commit-config.yaml.bak
+
+# AWS credentials and config
+.aws/
+aws.config
+aws.credentials
+
+# Kubernetes config
+kubeconfig
+*.kubeconfig
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Terraform documentation
+modules/*/README.md
+
+# Local development files
+local/
+dev/
+test/

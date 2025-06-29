@@ -91,17 +91,17 @@ output "node_groups" {
   description = "Map of EKS node groups created"
   value = {
     for k, v in aws_eks_node_group.main : k => {
-      id                = v.id
-      arn               = v.arn
-      status            = v.status
-      node_group_name   = v.node_group_name
-      cluster_name      = v.cluster_name
-      node_role_arn     = v.node_role_arn
-      subnet_ids        = v.subnet_ids
-      instance_types    = v.instance_types
-      capacity_type     = v.capacity_type
-      scaling_config    = v.scaling_config
-      update_config     = v.update_config
+      id              = v.id
+      arn             = v.arn
+      status          = v.status
+      node_group_name = v.node_group_name
+      cluster_name    = v.cluster_name
+      node_role_arn   = v.node_role_arn
+      subnet_ids      = v.subnet_ids
+      instance_types  = v.instance_types
+      capacity_type   = v.capacity_type
+      scaling_config  = v.scaling_config
+      update_config   = v.update_config
     }
   }
 }
@@ -111,14 +111,14 @@ output "fargate_profiles" {
   description = "Map of EKS Fargate profiles created"
   value = {
     for k, v in aws_eks_fargate_profile.main : k => {
-      id                  = v.id
-      arn                 = v.arn
-      status              = v.status
-      fargate_profile_name = v.fargate_profile_name
-      cluster_name        = v.cluster_name
+      id                     = v.id
+      arn                    = v.arn
+      status                 = v.status
+      fargate_profile_name   = v.fargate_profile_name
+      cluster_name           = v.cluster_name
       pod_execution_role_arn = v.pod_execution_role_arn
-      subnet_ids          = v.subnet_ids
-      selector            = v.selector
+      subnet_ids             = v.subnet_ids
+      selector               = v.selector
     }
   }
 }
@@ -164,4 +164,4 @@ output "fargate_profile_iam_role_arns" {
   value = {
     for k, v in aws_iam_role.eks_fargate_profile : k => v.arn
   }
-} 
+}

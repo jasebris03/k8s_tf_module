@@ -79,14 +79,14 @@ variable "tags" {
 variable "node_groups" {
   description = "Map of EKS node groups to create"
   type = map(object({
-    capacity_type    = string
-    instance_types   = list(string)
-    desired_size     = number
-    max_size         = number
-    min_size         = number
-    max_unavailable  = number
-    ami_id           = string
-    tags             = map(string)
+    capacity_type   = string
+    instance_types  = list(string)
+    desired_size    = number
+    max_size        = number
+    min_size        = number
+    max_unavailable = number
+    ami_id          = string
+    tags            = map(string)
   }))
   default = {}
 }
@@ -100,4 +100,4 @@ variable "fargate_profiles" {
     tags      = map(string)
   }))
   default = {}
-} 
+}

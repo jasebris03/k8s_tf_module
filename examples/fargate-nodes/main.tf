@@ -19,7 +19,7 @@ provider "aws" {
 module "eks_cluster" {
   source = "../../modules/eks"
 
-  cluster_name    = var.cluster_name
+  cluster_name       = var.cluster_name
   kubernetes_version = var.kubernetes_version
 
   # VPC Configuration
@@ -30,46 +30,46 @@ module "eks_cluster" {
   public_subnet_cidrs  = var.public_subnet_cidrs
 
   # Cluster Configuration
-  cluster_endpoint_public_access = var.cluster_endpoint_public_access
+  cluster_endpoint_public_access       = var.cluster_endpoint_public_access
   cluster_endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs
-  enabled_cluster_log_types = var.enabled_cluster_log_types
+  enabled_cluster_log_types            = var.enabled_cluster_log_types
 
   # Fargate Profiles Configuration
   fargate_profiles = {
     default = {
       namespace = "default"
       labels = {
-        Environment = var.environment
+        Environment    = var.environment
         FargateProfile = "default"
       }
       tags = {
-        Name = "${var.cluster_name}-default-fargate"
-        Environment = var.environment
+        Name           = "${var.cluster_name}-default-fargate"
+        Environment    = var.environment
         FargateProfile = "default"
       }
     }
     kube-system = {
       namespace = "kube-system"
       labels = {
-        Environment = var.environment
+        Environment    = var.environment
         FargateProfile = "kube-system"
       }
       tags = {
-        Name = "${var.cluster_name}-kube-system-fargate"
-        Environment = var.environment
+        Name           = "${var.cluster_name}-kube-system-fargate"
+        Environment    = var.environment
         FargateProfile = "kube-system"
       }
     }
     monitoring = {
       namespace = "monitoring"
       labels = {
-        Environment = var.environment
+        Environment    = var.environment
         FargateProfile = "monitoring"
-        App = "monitoring"
+        App            = "monitoring"
       }
       tags = {
-        Name = "${var.cluster_name}-monitoring-fargate"
-        Environment = var.environment
+        Name           = "${var.cluster_name}-monitoring-fargate"
+        Environment    = var.environment
         FargateProfile = "monitoring"
       }
     }
@@ -118,4 +118,4 @@ output "public_subnets" {
 output "fargate_profiles" {
   description = "Map of EKS Fargate profiles created"
   value       = module.eks_cluster.fargate_profiles
-} 
+}

@@ -35,7 +35,7 @@ data "aws_ami" "eks_optimized" {
 module "eks_cluster" {
   source = "../../modules/eks"
 
-  cluster_name    = var.cluster_name
+  cluster_name       = var.cluster_name
   kubernetes_version = var.kubernetes_version
 
   # VPC Configuration
@@ -46,9 +46,9 @@ module "eks_cluster" {
   public_subnet_cidrs  = var.public_subnet_cidrs
 
   # Cluster Configuration
-  cluster_endpoint_public_access = var.cluster_endpoint_public_access
+  cluster_endpoint_public_access       = var.cluster_endpoint_public_access
   cluster_endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs
-  enabled_cluster_log_types = var.enabled_cluster_log_types
+  enabled_cluster_log_types            = var.enabled_cluster_log_types
 
   # EC2 Node Groups Configuration
   node_groups = {
@@ -61,9 +61,9 @@ module "eks_cluster" {
       max_unavailable = 1
       ami_id          = data.aws_ami.eks_optimized.id
       tags = {
-        Name = "${var.cluster_name}-general-nodes"
+        Name        = "${var.cluster_name}-general-nodes"
         Environment = var.environment
-        NodeGroup = "general"
+        NodeGroup   = "general"
       }
     }
     spot = {
@@ -75,9 +75,9 @@ module "eks_cluster" {
       max_unavailable = 1
       ami_id          = data.aws_ami.eks_optimized.id
       tags = {
-        Name = "${var.cluster_name}-spot-nodes"
+        Name        = "${var.cluster_name}-spot-nodes"
         Environment = var.environment
-        NodeGroup = "spot"
+        NodeGroup   = "spot"
       }
     }
   }
@@ -87,38 +87,38 @@ module "eks_cluster" {
     default = {
       namespace = "default"
       labels = {
-        Environment = var.environment
+        Environment    = var.environment
         FargateProfile = "default"
       }
       tags = {
-        Name = "${var.cluster_name}-default-fargate"
-        Environment = var.environment
+        Name           = "${var.cluster_name}-default-fargate"
+        Environment    = var.environment
         FargateProfile = "default"
       }
     }
     monitoring = {
       namespace = "monitoring"
       labels = {
-        Environment = var.environment
+        Environment    = var.environment
         FargateProfile = "monitoring"
-        App = "monitoring"
+        App            = "monitoring"
       }
       tags = {
-        Name = "${var.cluster_name}-monitoring-fargate"
-        Environment = var.environment
+        Name           = "${var.cluster_name}-monitoring-fargate"
+        Environment    = var.environment
         FargateProfile = "monitoring"
       }
     }
     batch = {
       namespace = "batch"
       labels = {
-        Environment = var.environment
+        Environment    = var.environment
         FargateProfile = "batch"
-        App = "batch-processing"
+        App            = "batch-processing"
       }
       tags = {
-        Name = "${var.cluster_name}-batch-fargate"
-        Environment = var.environment
+        Name           = "${var.cluster_name}-batch-fargate"
+        Environment    = var.environment
         FargateProfile = "batch"
       }
     }
@@ -172,4 +172,4 @@ output "node_groups" {
 output "fargate_profiles" {
   description = "Map of EKS Fargate profiles created"
   value       = module.eks_cluster.fargate_profiles
-} 
+}

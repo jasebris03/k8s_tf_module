@@ -2,15 +2,13 @@
 # This module creates a secure, production-ready EKS cluster with best practices
 
 # Data sources
-data "aws_caller_identity" "current" {}
-data "aws_region" "current" {}
 data "aws_availability_zones" "available" {
   state = "available"
 }
 
 # VPC Configuration
 module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
+  source  = "terraform-aws-modules/vpc/aws"
   version = "~> 5.0"
 
   name = "${var.cluster_name}-vpc"
@@ -21,8 +19,8 @@ module "vpc" {
   public_subnets  = var.public_subnet_cidrs
 
   # Enable NAT Gateway for private subnets
-  enable_nat_gateway = true
-  single_nat_gateway = var.single_nat_gateway
+  enable_nat_gateway     = true
+  single_nat_gateway     = var.single_nat_gateway
   one_nat_gateway_per_az = var.one_nat_gateway_per_az
 
   # Enable DNS hostnames and support
@@ -126,9 +124,9 @@ resource "aws_security_group" "eks_cluster" {
   vpc_id      = module.vpc.vpc_id
 
   ingress {
-    from_port = 443
-    to_port   = 443
-    protocol  = "tcp"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
     description = "Allow HTTPS inbound from anywhere"
   }
@@ -156,7 +154,7 @@ resource "aws_eks_node_group" "main" {
   subnet_ids      = module.vpc.private_subnets
   version         = var.kubernetes_version
 
-  capacity_type = each.value.capacity_type
+  capacity_type  = each.value.capacity_type
   instance_types = each.value.instance_types
 
   scaling_config {
@@ -239,8 +237,8 @@ resource "aws_launch_template" "eks_node_group" {
   vpc_security_group_ids = [aws_security_group.eks_nodes.id]
 
   user_data = base64encode(templatefile("${path.module}/templates/user-data.sh", {
-    cluster_name = var.cluster_name
-    cluster_endpoint = aws_eks_cluster.main.endpoint
+    cluster_name           = var.cluster_name
+    cluster_endpoint       = aws_eks_cluster.main.endpoint
     cluster_ca_certificate = base64encode(aws_eks_cluster.main.certificate_authority[0].data)
   }))
 
@@ -356,4 +354,4 @@ resource "aws_iam_openid_connect_provider" "eks" {
   url             = aws_eks_cluster.main.identity[0].oidc[0].issuer
 
   tags = var.tags
-} 
+}
