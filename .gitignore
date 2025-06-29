@@ -170,3 +170,6 @@ modules/*/README.md
 local/
 dev/
 test/
+
+# Node Modules
+node_modules/
