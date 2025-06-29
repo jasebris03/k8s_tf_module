@@ -1,0 +1,22 @@
+{
+  "name": "terraform-k8s",
+  "version": "1.0.0",
+  "description": "Terraform module for creating secure, best practice EKS clusters on AWS",
+  "scripts": {
+    "test": "echo \"No tests specified\" && exit 0",
+    "lint": "pre-commit run --all-files"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^18.4.3",
+    "@commitlint/config-conventional": "^18.4.3"
+  },
+  "keywords": [
+    "terraform",
+    "aws",
+    "eks",
+    "kubernetes",
+    "infrastructure"
+  ],
+  "author": "",
+  "license": "MIT"
+}
